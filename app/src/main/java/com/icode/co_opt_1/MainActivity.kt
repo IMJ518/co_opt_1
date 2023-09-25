@@ -63,18 +63,24 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun SwipeablePages() {
     val animals = listOf(
-        R.drawable.test,
-        R.drawable.test2,
+        R.drawable.fox,
+        R.drawable.raccoon,
+        R.drawable.lion,
+        R.drawable.tiger,
     )
 
     val animalsName = listOf(
         "Fox",
-        "Racoon"
+        "Raccoon",
+        "Lion",
+        "Tiger",
     )
 
     val animalsTranslation = listOf(
-        "여우",
-        "라쿤"
+        "여우 - yeou",
+        "너구리 - neoguli",
+        "사자 - saja",
+        "호랑이 - holang-i",
     )
 
     val pagerState = rememberPagerState()
