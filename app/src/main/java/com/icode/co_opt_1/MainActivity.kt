@@ -106,6 +106,8 @@ fun SwipeablePages() {
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
+                    .requiredSize(350.dp)
+                    .align(CenterHorizontally)
                     .fillMaxWidth()
                     .clickable { expanded = !expanded }
             )
