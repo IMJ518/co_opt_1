@@ -48,6 +48,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+/**
+ * Main content of application
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +68,9 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+/**
+ * This function renders swipeable pages.
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SwipeablePages() {
@@ -92,7 +98,12 @@ fun SwipeablePages() {
     val pageCount = animals.size
     val pagerState = rememberPagerState()
 
-
+    /**
+     * A pager that scrolls horizontally
+     * @param pageCount The amount of pages this Pager will have
+     * @param state The state to control this pager
+     * @param key an unique key representing the item
+     */
     HorizontalPager(
         pageCount = pageCount,
         state = pagerState,
