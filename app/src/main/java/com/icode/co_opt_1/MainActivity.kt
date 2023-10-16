@@ -1,6 +1,7 @@
 package com.icode.co_opt_1
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
@@ -24,7 +25,12 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Card
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -47,6 +53,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /**
  * Main content of application
@@ -115,6 +124,8 @@ fun SwipeablePages() {
         ) {
             var expanded by remember { mutableStateOf(false) }
 
+            var translation = translateText(animalsName[index])
+
             Text(
                 text = animalsName[index],
                 textAlign = TextAlign.Center,
@@ -139,15 +150,19 @@ fun SwipeablePages() {
             )
 
             AnimatedVisibility(expanded) {
-                Text(
-                    text = animalsTranslation[index],
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
-                    style = TextStyle(
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold
+                Column(verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = animalsTranslation[index],
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                        style = TextStyle(
+                            fontSize = 30.sp,
+                            fontWeight = FontWeight.Bold
+                        )
                     )
-                )
+                    Example(onClick = { Log.d("FAB", " clicked.") })
+                }
             }
         }
     }
@@ -173,6 +188,40 @@ fun SwipeablePages() {
         }
     }
 }
+
+@Composable
+fun Example(onClick: () -> Unit) {
+    FloatingActionButton(
+        onClick = { onClick() },
+        modifier = Modifier.padding(10.dp)
+    ) {
+        Icon(Icons.Filled.PlayArrow, "Floating action button.")
+    }
+}
+
+
+
+@Composable
+fun translateText(text: String) {
+    val request = TranslateRequest(q = text, source = "en", target = "fr")
+
+    ApiClient.instance.translateText(request).enqueue(object : Callback<TranslateResponse> {
+        override fun onResponse(call: Call<TranslateResponse>, response: Response<TranslateResponse>) {
+            if (response.isSuccessful) {
+                val translatedText = response.body()?.translatedText
+
+            } else {
+                // Handle the error, e.g., show a Toast or a Snackbar with an error message.
+            }
+        }
+
+        override fun onFailure(call: Call<TranslateResponse>, t: Throwable) {
+            // Handle failure, e.g., no internet connection. Again, consider using Toast or Snackbar.
+        }
+    })
+}
+
+
 
 //@Composable
 //fun JetpackCompose() {
