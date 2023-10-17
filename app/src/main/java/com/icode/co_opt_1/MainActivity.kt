@@ -201,7 +201,7 @@ fun Example(onClick: () -> Unit) {
 
 
 
-@Composable
+
 fun translateText(text: String) {
     val request = TranslateRequest(q = text, source = "en", target = "fr")
 
