@@ -77,32 +77,36 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+val animals = listOf(
+    R.drawable.fox,
+    R.drawable.raccoon,
+    R.drawable.lion,
+    R.drawable.tiger,
+)
+
+val animalsName = listOf(
+    "Fox",
+    "Raccoon",
+    "Lion",
+    "Tiger",
+)
+
+val animalsTranslation = listOf(
+    "여우 - yeou",
+    "너구리 - neoguli",
+    "사자 - saja",
+    "호랑이 - holang-i",
+)
+
+var anitrans: String = ""
+
+
 /**
  * This function renders swipeable pages.
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SwipeablePages() {
-    val animals = listOf(
-        R.drawable.fox,
-        R.drawable.raccoon,
-        R.drawable.lion,
-        R.drawable.tiger,
-    )
-
-    val animalsName = listOf(
-        "Fox",
-        "Raccoon",
-        "Lion",
-        "Tiger",
-    )
-
-    val animalsTranslation = listOf(
-        "여우 - yeou",
-        "너구리 - neoguli",
-        "사자 - saja",
-        "호랑이 - holang-i",
-    )
 
     val pageCount = animals.size
     val pagerState = rememberPagerState()
@@ -146,14 +150,19 @@ fun SwipeablePages() {
                     .padding(10.dp)
                     .align(CenterHorizontally)
                     .fillMaxWidth()
-                    .clickable { expanded = !expanded }
+                    .clickable {
+                        expanded = !expanded
+                        if (expanded){
+                            translateText(animalsName[index])
+                        }
+                    }
             )
 
             AnimatedVisibility(expanded) {
                 Column(verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = animalsTranslation[index],
+                        text = anitrans,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
                         style = TextStyle(
@@ -203,13 +212,16 @@ fun Example(onClick: () -> Unit) {
 
 
 fun translateText(text: String) {
-    val request = TranslateRequest(q = text, source = "en", target = "fr")
+    val request = TranslateRequest(q = text, source = "en", target = "pt")
 
     ApiClient.instance.translateText(request).enqueue(object : Callback<TranslateResponse> {
         override fun onResponse(call: Call<TranslateResponse>, response: Response<TranslateResponse>) {
             if (response.isSuccessful) {
                 val translatedText = response.body()?.translatedText
-
+                if (translatedText != null)
+                {
+                    anitrans = translatedText
+                }
             } else {
                 // Handle the error, e.g., show a Toast or a Snackbar with an error message.
             }
