@@ -128,8 +128,6 @@ fun SwipeablePages() {
         ) {
             var expanded by remember { mutableStateOf(false) }
 
-            var translation = translateText(animalsName[index])
-
             Text(
                 text = animalsName[index],
                 textAlign = TextAlign.Center,
@@ -221,6 +219,7 @@ fun translateText(text: String) {
                 if (translatedText != null)
                 {
                     anitrans = translatedText
+                    Log.d("test", anitrans)
                 }
             } else {
                 // Handle the error, e.g., show a Toast or a Snackbar with an error message.
