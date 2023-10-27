@@ -70,6 +70,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    translateText(animalsName[0]) // get translation of the first animal in the list
                     SwipeablePages()
                 }
             }
@@ -78,27 +79,20 @@ class MainActivity : ComponentActivity() {
 }
 
 val animals = listOf(
-    R.drawable.fox,
-    R.drawable.raccoon,
+    R.drawable.dog,
+    R.drawable.cat,
     R.drawable.lion,
     R.drawable.tiger,
 )
 
 val animalsName = listOf(
-    "Fox",
-    "Raccoon",
+    "Dog",
+    "Cat",
     "Lion",
     "Tiger",
 )
 
-val animalsTranslation = listOf(
-    "여우 - yeou",
-    "너구리 - neoguli",
-    "사자 - saja",
-    "호랑이 - holang-i",
-)
-
-var anitrans: String = ""
+var translation: String = ""
 
 
 /**
@@ -160,7 +154,7 @@ fun SwipeablePages() {
                 Column(verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = anitrans,
+                        text = translation,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
                         style = TextStyle(
@@ -168,7 +162,7 @@ fun SwipeablePages() {
                             fontWeight = FontWeight.Bold
                         )
                     )
-                    Example(onClick = { Log.d("FAB", " clicked.") })
+                    BtnPlay(onClick = { Log.d("FAB", " clicked.") })
                 }
             }
         }
@@ -196,8 +190,9 @@ fun SwipeablePages() {
     }
 }
 
+
 @Composable
-fun Example(onClick: () -> Unit) {
+fun BtnPlay(onClick: () -> Unit) {
     FloatingActionButton(
         onClick = { onClick() },
         modifier = Modifier.padding(10.dp)
@@ -208,138 +203,28 @@ fun Example(onClick: () -> Unit) {
 
 
 
-
+// Translate text into the target language
 fun translateText(text: String) {
     val request = TranslateRequest(q = text, source = "en", target = "pt")
 
-    ApiClient.instance.translateText(request).enqueue(object : Callback<TranslateResponse> {
+    // Send asynchronous HTTP request using enqueue() method (for synchronous request, use execute())
+    ApiService.instance.translate(request).enqueue(object : Callback<TranslateResponse> {
         override fun onResponse(call: Call<TranslateResponse>, response: Response<TranslateResponse>) {
             if (response.isSuccessful) {
+                // Handle data
                 val translatedText = response.body()?.translatedText
                 if (translatedText != null)
                 {
-                    anitrans = translatedText
-                    Log.d("test", anitrans)
+                    translation = translatedText
+                    Log.d("test", translation) // print the translated text in the logcat
                 }
             } else {
-                // Handle the error, e.g., show a Toast or a Snackbar with an error message.
+                // Handle error
             }
         }
 
         override fun onFailure(call: Call<TranslateResponse>, t: Throwable) {
-            // Handle failure, e.g., no internet connection. Again, consider using Toast or Snackbar.
+            // Handle failure of the request
         }
     })
 }
-
-
-
-//@Composable
-//fun JetpackCompose() {
-//    Row(
-//        Modifier.horizontalScroll(rememberScrollState()),
-//        horizontalArrangement = Arrangement.SpaceEvenly,
-//        verticalAlignment = Alignment.CenterVertically
-//
-//
-//    ) {
-//        Column(
-//            Modifier
-//                .padding(20.dp)
-//                .fillMaxWidth()) {
-//            var expanded by remember { mutableStateOf(false) }
-//
-//            Text(
-//                text = "First animal",
-//                textAlign = TextAlign.Center,
-//                modifier = Modifier.fillMaxWidth(),
-//                style = TextStyle(
-//                    fontSize = 30.sp,
-//                    fontWeight = FontWeight.Bold
-//                )
-//            )
-//            Image(painterResource(R.drawable.test), "Card image",
-//                Modifier
-//                    .requiredSize(350.dp)
-//                    .align(CenterHorizontally)
-//                    .clickable { expanded = !expanded })
-//            AnimatedVisibility(expanded) {
-//                Text(
-//                    text = "Animal",
-//                    textAlign = TextAlign.Center,
-//                    modifier = Modifier.fillMaxWidth(),
-//                    style = TextStyle(
-//                        fontSize = 30.sp,
-//                        fontWeight = FontWeight.Bold
-//                    )
-//                )
-//            }
-//        }
-//
-//        Column(
-//            Modifier
-//                .padding(20.dp)
-//                .fillMaxWidth()) {
-//            var expanded by remember { mutableStateOf(false) }
-//
-//            Text(
-//                text = "Second animal",
-//                textAlign = TextAlign.Center,
-//                modifier = Modifier.fillMaxWidth(),
-//                style = TextStyle(
-//                    fontSize = 30.sp,
-//                    fontWeight = FontWeight.Bold
-//                )
-//            )
-//            Image(painterResource(R.drawable.test), "Card image",
-//                Modifier
-//                    .requiredSize(350.dp)
-//                    .align(CenterHorizontally)
-//                    .clickable { expanded = !expanded })
-//            AnimatedVisibility(expanded) {
-//                Text(
-//                    text = "Animal",
-//                    textAlign = TextAlign.Center,
-//                    modifier = Modifier.fillMaxWidth(),
-//                    style = TextStyle(
-//                        fontSize = 30.sp,
-//                        fontWeight = FontWeight.Bold
-//                    )
-//                )
-//            }
-//        }
-//
-//        Column(
-//            Modifier
-//                .padding(20.dp)
-//                .fillMaxWidth()) {
-//            var expanded by remember { mutableStateOf(false) }
-//
-//            Text(
-//                text = "Third animal",
-//                textAlign = TextAlign.Center,
-//                modifier = Modifier.fillMaxWidth(),
-//                style = TextStyle(
-//                    fontSize = 30.sp,
-//                    fontWeight = FontWeight.Bold
-//                )
-//            )
-//            Image(painterResource(R.drawable.test), "Card image",
-//                Modifier
-//                    .requiredSize(350.dp)
-//                    .align(CenterHorizontally)
-//                    .clickable { expanded = !expanded })
-//            AnimatedVisibility(expanded) {
-//                Text(
-//                    text = "Animal",
-//                    textAlign = TextAlign.Center,
-//                    modifier = Modifier.fillMaxWidth(),
-//                    style = TextStyle(
-//                        fontSize = 30.sp,
-//                        fontWeight = FontWeight.Bold
-//                    )
-//                )
-//            }
-//        }
-//    }
-//}
