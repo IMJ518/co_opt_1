@@ -70,7 +70,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    translateText(animalsName[0]) // get translation of the first animal in the list
                     SwipeablePages()
                 }
             }
