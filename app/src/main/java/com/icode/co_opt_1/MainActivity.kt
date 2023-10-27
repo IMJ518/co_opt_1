@@ -205,6 +205,7 @@ fun BtnPlay(onClick: () -> Unit) {
 
 // Translate text into the target language
 fun translateText(text: String) {
+    translation = ""
     val request = TranslateRequest(q = text, source = "en", target = "pt")
 
     // Send asynchronous HTTP request using enqueue() method (for synchronous request, use execute())
@@ -216,7 +217,7 @@ fun translateText(text: String) {
                 if (translatedText != null)
                 {
                     translation = translatedText
-                    Log.d("test", translation) // print the translated text in the logcat
+                    Log.d("test", translation) // print the translated text in logcat
                 }
             } else {
                 // Handle error
